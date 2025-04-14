@@ -2,17 +2,19 @@
 import dotenv from "dotenv"
 import mongoose from "mongoose";
 import express from "express"
+import userRouter from "./routes/user.routes.js";
+
 // import { DB_NAME } from "./constants.js";
 import connectDB from "./db/index.js";
 
 const app = express()
 
 dotenv.config({
-    path:'./env'
+    path:'./.env'
 })
 connectDB()
 .then(()=>{
-    app.listen(process.env.PORT || 8000, ()=>{
+    app.listen(process.env.PORT , ()=>{
         console.log(`server is running at port ${process.env.PORT}`);
         
     })
@@ -23,6 +25,7 @@ connectDB()
 })
 
 
+app.use("/api/v1/users", userRouter);
 
 
 
