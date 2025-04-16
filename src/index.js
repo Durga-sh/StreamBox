@@ -9,6 +9,9 @@ import connectDB from "./db/index.js";
 
 const app = express()
 
+app.use(express.json({
+    limit: "100kb"
+}));
 dotenv.config({
     path:'./.env'
 })
