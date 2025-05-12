@@ -8,20 +8,22 @@ import { verifyJWT } from "../middlewares/auth.middleware.js";
 const generateAccessAndRefereshTokens = async (userId) => {
   try {
     const user = await User.findById(userId);
-    const accessToken = user.generateAccessToken();
-    console.log("User before generating refresh token:", user);
-    const refreshToken = user.generateRefreshToken();
 
-    console.log("User after generating refresh token:", user);
-    console.log("Access Token:", accessToken);
-    console.log("Refresh Token:", refreshToken);
+    if (!user) {
+      throw new ApiError(404, "User not found");
+    }
+
+    console.log("User before generating tokens:", user); // Debug log
+
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
 
     user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
 
     return { accessToken, refreshToken };
   } catch (error) {
-    console.error("Error in generateAccessAndRefereshTokens:", error.message);
+    console.error("Error in token generation:", error); // Debug log
     throw new ApiError(
       500,
       "Something went wrong while generating refresh and access token"

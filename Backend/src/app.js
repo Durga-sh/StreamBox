@@ -11,12 +11,15 @@ app.use(
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    exposedHeaders: ["set-cookie"],
   })
 );
 
-app.use(express.json({
-    limit: "100kb"
-}));
+app.use(
+  express.json({
+    limit: "100kb",
+  })
+);
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 
 app.use(express.static("public"));

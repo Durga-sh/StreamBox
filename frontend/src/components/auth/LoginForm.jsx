@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 const LoginForm = () => {
   const [loginData, setLoginData] = useState({
     username: "",
-    email: "",
     password: "",
   });
+  const [isUsingEmail, setIsUsingEmail] = useState(false);
   const [error, setError] = useState(null);
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -18,6 +18,11 @@ const LoginForm = () => {
       ...prev,
       [name]: value,
     }));
+
+    // If the input field is username, check if it looks like an email
+    if (name === "username") {
+      setIsUsingEmail(value.includes("@"));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -25,12 +30,22 @@ const LoginForm = () => {
     setError(null);
 
     try {
-      // You can choose to login with either username or email
-      const response = await login(loginData);
-      // Redirect to dashboard or home page after successful login
+      // Create the credentials object based on whether we're using email or username
+      const credentials = {
+        password: loginData.password,
+      };
+
+      if (isUsingEmail) {
+        credentials.email = loginData.username;
+      } else {
+        credentials.username = loginData.username;
+      }
+
+      const response = await login(credentials);
       navigate("/dashboard");
     } catch (err) {
-      setError(err.message || "Login failed");
+      console.error("Login error:", err);
+      setError(err.message || "Login failed. Please check your credentials.");
     }
   };
 
@@ -48,16 +63,18 @@ const LoginForm = () => {
             htmlFor="username"
             className="block text-gray-700 font-bold mb-2"
           >
-            Username or Email
+            {isUsingEmail ? "Email" : "Username or Email"}
           </label>
           <input
-            type="text"
+            type={isUsingEmail ? "email" : "text"}
             id="username"
             name="username"
             value={loginData.username}
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-            placeholder="Enter username or email"
+            placeholder={
+              isUsingEmail ? "Enter email" : "Enter username or email"
+            }
             required
           />
         </div>
