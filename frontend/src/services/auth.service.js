@@ -104,3 +104,6 @@ export const authService = {
     }
   },
 };
+
+// Export the api instance
+export { api };

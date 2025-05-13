@@ -12,13 +12,15 @@ import { useAuth } from "./hooks/useAuth";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import UploadVideo from "./pages/UploadVideo";
+import VideoDetails from "./pages/VideoDetails";
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
-    return <div>Loading...</div>; // Or a more sophisticated loading component
+    return <div>Loading...</div>;
   }
 
   return isAuthenticated ? children : <Navigate to="/login" replace />;
@@ -40,6 +42,22 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/upload-video"
+              element={
+                <ProtectedRoute>
+                  <UploadVideo />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/video/:videoId"
+              element={
+                <ProtectedRoute>
+                  <VideoDetails />
                 </ProtectedRoute>
               }
             />

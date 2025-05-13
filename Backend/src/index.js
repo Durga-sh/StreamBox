@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes.js";
+import videoRouter from "./routes/video.routes.js"
 import connectDB from "./db/index.js";
 import { app as appImport } from "./app.js";
 
@@ -29,6 +30,7 @@ app.use(cookieParser());
 
 // Register the user routes
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/videos", videoRouter);
 
 // Connect to database and start server
 connectDB()
