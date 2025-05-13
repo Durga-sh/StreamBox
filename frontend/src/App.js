@@ -14,6 +14,9 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import UploadVideo from "./pages/UploadVideo";
 import VideoDetails from "./pages/VideoDetails";
+import Header from "./components/common/Header";
+import Navbar from "./components/common/Navbar";
+import Footer from "./components/common/Footer";
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -30,41 +33,46 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="App">
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+        <div className="App flex flex-col min-h-screen">
+          <Header />
+          <Navbar />
+          <main className="flex-grow">
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
 
-            {/* Protected Routes */}
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/upload-video"
-              element={
-                <ProtectedRoute>
-                  <UploadVideo />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/video/:videoId"
-              element={
-                <ProtectedRoute>
-                  <VideoDetails />
-                </ProtectedRoute>
-              }
-            />
+              {/* Protected Routes */}
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/upload-video"
+                element={
+                  <ProtectedRoute>
+                    <UploadVideo />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/video/:videoId"
+                element={
+                  <ProtectedRoute>
+                    <VideoDetails />
+                  </ProtectedRoute>
+                }
+              />
 
-            {/* Redirect to login for root path if not authenticated */}
-            <Route path="/" element={<Navigate to="/login" replace />} />
-          </Routes>
+              {/* Redirect to login for root path if not authenticated */}
+              <Route path="/" element={<Navigate to="/login" replace />} />
+            </Routes>
+          </main>
+          <Footer />
         </div>
       </Router>
     </AuthProvider>
