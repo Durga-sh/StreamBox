@@ -4,8 +4,8 @@ import {
   toggleCommentLike,
   toggleTweetLike,
   getLikedVideos,
-  getChannelStats,
-  getChannelVideos,
+  getChannelStats
+  
 } from "../controllers/like.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -23,6 +23,6 @@ router.route("/videos").get(getLikedVideos);
 
 // Channel stats and videos
 router.route("/stats").get(getChannelStats);
-router.route("/videos/channel").get(getChannelVideos);
+
 
 export default router;

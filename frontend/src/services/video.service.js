@@ -3,12 +3,11 @@ import axios from "axios";
 // Import the api instance from auth.service.js to reuse the default headers
 import { api } from "./auth.service";
 
-const BASE_URL = "http://localhost:5000/api/v1/videos";
+const BASE_URL = "http://localhost:5000/api/v1";
 
-// Create a new instance for videoService
 const videoApi = axios.create({
   baseURL: BASE_URL,
-  withCredentials: true, // Ensure cookies are sent
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
@@ -30,7 +29,7 @@ if (
 const videoService = {
   getAllVideos: async (params = {}) => {
     try {
-      const response = await videoApi.get("", { params });
+      const response = await videoApi.get("/videos", { params });
       return response.data;
     } catch (error) {
       console.error("Error fetching videos:", error);
@@ -40,7 +39,7 @@ const videoService = {
 
   uploadVideo: async (formData) => {
     try {
-      const response = await videoApi.post("", formData, {
+      const response = await videoApi.post("/videos", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -54,7 +53,7 @@ const videoService = {
 
   getVideoById: async (videoId) => {
     try {
-      const response = await videoApi.get(`/${videoId}`);
+      const response = await videoApi.get(`/videos/${videoId}`);
       return response.data;
     } catch (error) {
       console.error("Error fetching video by ID:", error);
@@ -62,7 +61,45 @@ const videoService = {
     }
   },
 
-  
+  toggleVideoLike: async (videoId) => {
+    try {
+      const response = await videoApi.post(`/likes/v/${videoId}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error toggling video like:", error);
+      throw error.response?.data || new Error("Failed to toggle like");
+    }
+  },
+
+  checkVideoLike: async (videoId) => {
+    try {
+      const response = await videoApi.get(`/likes/v/${videoId}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error checking video like:", error);
+      throw error.response?.data || new Error("Failed to check like status");
+    }
+  },
+
+  addComment: async (videoId, commentData) => {
+    try {
+      const response = await videoApi.post(`/comments/${videoId}`, commentData);
+      return response.data;
+    } catch (error) {
+      console.error("Error adding comment:", error);
+      throw error.response?.data || new Error("Failed to add comment");
+    }
+  },
+
+  getVideoComments: async (videoId, params = {}) => {
+    try {
+      const response = await videoApi.get(`/comments/${videoId}`, { params });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+      throw error.response?.data || new Error("Failed to fetch comments");
+    }
+  },
 };
 
 export default videoService;
