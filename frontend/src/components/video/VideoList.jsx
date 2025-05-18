@@ -16,88 +16,25 @@ const VideoList = () => {
       try {
         console.log("Token in VideoList:", token); // Debug
         const response = await videoService.getAllVideos();
+        console.log("VideoList response:", response); // Debug
 
-        if (response && response.data && response.data.docs) {
-          setVideos(response.data.docs);
-        } else if (response && response.data) {
-          setVideos(response.data);
-        } else {
-          // Fallback to sample videos if API doesn't return expected format
-          const sampleVideos = [
-            {
-              _id: "1",
-              title: "Getting Started with StreamBox",
-              thumbnail: "https://picsum.photos/seed/video1/800/450",
-              views: 1240,
-              owner: {
-                username: "username",
-                avatar:
-                  "https://ui-avatars.com/api/?name=User&background=random",
-              },
-            },
-            {
-              _id: "2",
-              title: "How to Create Engaging Content",
-              thumbnail: "https://picsum.photos/seed/video2/800/450",
-              views: 856,
-              owner: {
-                username: "username",
-                avatar:
-                  "https://ui-avatars.com/api/?name=User&background=random",
-              },
-            },
-            {
-              _id: "3",
-              title: "Video Editing Tips & Tricks",
-              thumbnail: "https://picsum.photos/seed/video3/800/450",
-              views: 3210,
-              owner: {
-                username: "username",
-                avatar:
-                  "https://ui-avatars.com/api/?name=User&background=random",
-              },
-            },
-          ];
-          setVideos(sampleVideos);
+        const fetchedVideos = response.docs || [];
+        console.log("Fetched videos in VideoList:", fetchedVideos);
+
+        if (fetchedVideos.length === 0) {
+          console.warn("No videos found in VideoList");
+          setError("No videos available to display.");
         }
-      } catch (err) {
-        console.error("Error fetching videos:", err);
-        setError(err.message || "Failed to fetch videos");
 
-        // Fallback to sample videos on error
-        const sampleVideos = [
-          {
-            _id: "1",
-            title: "Getting Started with StreamBox",
-            thumbnail: "https://picsum.photos/seed/video1/800/450",
-            views: 1240,
-            owner: {
-              username: "username",
-              avatar: "https://ui-avatars.com/api/?name=User&background=random",
-            },
-          },
-          {
-            _id: "2",
-            title: "How to Create Engaging Content",
-            thumbnail: "https://picsum.photos/seed/video2/800/450",
-            views: 856,
-            owner: {
-              username: "username",
-              avatar: "https://ui-avatars.com/api/?name=User&background=random",
-            },
-          },
-          {
-            _id: "3",
-            title: "Video Editing Tips & Tricks",
-            thumbnail: "https://picsum.photos/seed/video3/800/450",
-            views: 3210,
-            owner: {
-              username: "username",
-              avatar: "https://ui-avatars.com/api/?name=User&background=random",
-            },
-          },
-        ];
-        setVideos(sampleVideos);
+        setVideos(fetchedVideos);
+      } catch (err) {
+        const errorMessage = err.message || "Failed to fetch videos";
+        console.error("Error fetching videos in VideoList:", {
+          message: errorMessage,
+          status: err.response?.status,
+          data: err.response?.data,
+        });
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }

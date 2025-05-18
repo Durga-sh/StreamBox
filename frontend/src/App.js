@@ -14,6 +14,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import UploadVideo from "./pages/UploadVideo";
 import VideoDetails from "./pages/VideoDetails";
+import ChannelPage from "./pages/Channnel"; // Added import for ChannelPage
 import Header from "./components/common/Header";
 import Navbar from "./components/common/Navbar";
 import Footer from "./components/common/Footer";
@@ -64,6 +65,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <VideoDetails />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/channel/:username"
+                element={
+                  <ProtectedRoute>
+                    <ChannelPage />
                   </ProtectedRoute>
                 }
               />

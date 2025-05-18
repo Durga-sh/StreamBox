@@ -29,10 +29,20 @@ if (
 const videoService = {
   getAllVideos: async (params = {}) => {
     try {
+      console.log("getAllVideos params:", params); // Log query params (e.g., userId)
+      console.log("getAllVideos Authorization header:", videoApi.defaults.headers.common["Authorization"]); // Log token
       const response = await videoApi.get("/videos", { params });
-      return response.data;
+      console.log("getAllVideos response:", response.data); // Log full response
+      console.log("getAllVideos docs:", response.data.data?.docs || []); // Log extracted docs
+      return response.data.data; // Return the nested data object containing docs
     } catch (error) {
-      console.error("Error fetching videos:", error);
+      console.error("Error fetching videos in video.service.js:", {
+        message: error.message,
+        status: error.response?.status,
+        data: error.response?.data,
+        url: error.config?.url,
+        params: params,
+      });
       throw error.response?.data || new Error("Failed to fetch videos");
     }
   },
@@ -53,10 +63,20 @@ const videoService = {
 
   getVideoById: async (videoId) => {
     try {
+      console.log("getVideoById videoId:", videoId); // Log the videoId being requested
+      console.log("getVideoById Authorization header:", videoApi.defaults.headers.common["Authorization"]); // Log token
       const response = await videoApi.get(`/videos/${videoId}`);
-      return response.data;
+      console.log("getVideoById response:", response.data); // Log full response
+      console.log("getVideoById video data:", response.data.data); // Log extracted video data
+      return response.data.data; // Return the nested video object
     } catch (error) {
-      console.error("Error fetching video by ID:", error);
+      console.error("Error fetching video by ID in video.service.js:", {
+        message: error.message,
+        status: error.response?.status,
+        data: error.response?.data,
+        url: error.config?.url,
+        videoId: videoId,
+      });
       throw error.response?.data || new Error("Failed to fetch video");
     }
   },

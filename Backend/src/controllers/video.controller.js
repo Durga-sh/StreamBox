@@ -32,8 +32,10 @@ const getAllVideos = asyncHandler(async (req, res) => {
     queryObj.owner = userId;
   }
 
-  // Only fetch published videos
-  queryObj.isPublished = true;
+  // Only fetch published videos unless the user is the owner
+  if (!userId || req.user?._id.toString() !== userId.toString()) {
+    queryObj.isPublished = true;
+  }
 
   // Build sort options
   const sortOptions = {};

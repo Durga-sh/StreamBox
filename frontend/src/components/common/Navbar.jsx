@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
 const Navbar = () => {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth(); // Added user to access username
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -52,7 +52,7 @@ const Navbar = () => {
                   Upload Video
                 </Link>
                 <Link
-                  to="/channel/edit"
+                  to={`/channel/${user?.username}`} // Dynamic route using user's username
                   className="text-slate-300 hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Your Channel
